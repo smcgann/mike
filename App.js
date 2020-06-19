@@ -1,64 +1,57 @@
-import React, { useState}  from 'react';
-import {Alert,StyleSheet, Switch, Button, Navigator, Text,  View } from 'react-native';
+import * as React from 'react';
+import { Button, View, Text } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 
-export default function App() {
-  //runs lock
-  const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+//runs home page
+function HomeScreen({ navigation }) {
 
   return (
-    <View style={styles.full}>
-      <View style={styles.head}>
-        <Text>Loud Speaker App</Text>
-        <Button title="Settings" onPress = {() => Alert.alert("Settings")}/>
-      </View>
-      <View style={styles.controls}>
-        <Button title="PUSH" onPress = {() => Alert.alert("WORDS OUT")}/>
-        <Text>Lock on</Text>
-        <Switch
-          trackColor={{ false: "#767577", true: "#81b0ff" }}
-          thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
-          ios_backgroundColor="#3e3e3e"
-          onValueChange={toggleSwitch}
-          value={isEnabled}/>
-      </View>
-      <View style={styles.extra}>
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <View style={{ height: '90%', width: "90%", alignItems: 'center', justifyContent: 'center' }}>
+        <View style={{ height: "10%", width: "90%", alignItems: 'center', justifyContent: 'center' }}><Text>Mouth Piece</Text></View>
+        <View style={{ height: "10%", width: "90%", alignItems: 'center', justifyContent: 'center'}}><Button title="PUSH"/></View>
+        <View style={{ height: "80%", width: "90%", alignItems: 'center', justifyContent: 'center', borderWidth: 3 }}><Text>Volume and Blutooth</Text></View>
       </View>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  full: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+//runs settings page
+function SettingScreen({ navigation }) {
 
-  head: {
-    height: '10%',
-    width: '100%',
-    backgroundColor: '#ff0000',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: "row",
-  },
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text>Setting Screen</Text>
+    </View>
+  );
+}
 
-  controls: {
-    height: '45%',
-    width: '100%',
-    backgroundColor: '#0000ff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: "row",
-  },
+//runs from here
+const Stack = createStackNavigator();
 
-  extra: {
-    height: '45%',
-    width: '100%',
-    backgroundColor: '#00ff00',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+function App({ navigation }) {
+
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen name="Home" component={HomeScreen}
+          options={({ navigation }) => ({
+            headerRight: () => (
+              <Button
+                onPress ={() => navigation.navigate('Settings')}
+                title="Settings"
+                color="#fff"
+              />
+            ),
+            title: 'MouthPiece',
+            headerTitleAlign: 'center',
+          })}
+      />
+        <Stack.Screen name="Settings" component={SettingScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
+
+export default App;
